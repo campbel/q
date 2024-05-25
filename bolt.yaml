@@ -1,8 +1,24 @@
 tools:
   - golang: "1.22.3"
 
+up:
+  - go install golang.org/x/tools/cmd/goimports@latest
+  - go install golang.org/x/tools/cmd/godoc@latest
+
 cmds:
   test:
     desc: "Run tests"
     steps:
       - sh: "go test ./..."
+
+  docs:
+    desc: "Generate documentation"
+    steps:
+      - group:
+          - sh: "godoc -http=:6060"
+          - sh: "open http://localhost:6060/pkg/github.com/campbel/q/"
+
+  fmt:
+    desc: "Format code"
+    steps:
+      - sh: "goimports -w ."

@@ -323,6 +323,7 @@ func Equal[M comparable](a, b *List[M]) bool {
 		}
 	}
 	return true
+
 }
 
 // Join combines multiple lists into a single list.
