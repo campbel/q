@@ -1,0 +1,8 @@
+tools:
+  - golang: "1.22.3"
+
+cmds:
+  test:
+    desc: "Run tests"
+    steps:
+      - sh: "go test ./..."
