@@ -6,11 +6,13 @@ type Set[T comparable] struct {
 }
 
 // NewSet creates a new Set and returns a pointer to it.
+// Time complexity: O(1).
 func NewSet[T comparable]() *Set[T] {
 	return &Set[T]{data: make(map[T]struct{})}
 }
 
 // Add adds one or more elements to the set.
+// Time complexity: O(n), where n is the number of elements being added.
 func (s *Set[T]) Add(elements ...T) {
 	for _, element := range elements {
 		s.data[element] = struct{}{}
@@ -18,27 +20,32 @@ func (s *Set[T]) Add(elements ...T) {
 }
 
 // Remove removes an element from the set.
+// Time complexity: O(1).
 func (s *Set[T]) Remove(element T) {
 	delete(s.data, element)
 }
 
 // Contains checks if an element is present in the set.
+// Time complexity: O(1).
 func (s *Set[T]) Contains(element T) bool {
 	_, exists := s.data[element]
 	return exists
 }
 
 // Len returns the number of elements in the set.
+// Time complexity: O(1).
 func (s *Set[T]) Len() int {
 	return len(s.data)
 }
 
 // Clear removes all elements from the set.
+// Time complexity: O(1).
 func (s *Set[T]) Clear() {
 	s.data = make(map[T]struct{})
 }
 
 // Elements returns a slice containing all the elements in the set.
+// Time complexity: O(n), where n is the number of elements in the set.
 func (s *Set[T]) Elements() []T {
 	elements := make([]T, 0, len(s.data))
 	for element := range s.data {
@@ -48,6 +55,7 @@ func (s *Set[T]) Elements() []T {
 }
 
 // Union returns a new set that is the union of the current set and another set.
+// Time complexity: O(n), where n is the total number of elements in both sets.
 func (s *Set[T]) Union(other *Set[T]) *Set[T] {
 	result := NewSet[T]()
 	for element := range s.data {
@@ -60,6 +68,7 @@ func (s *Set[T]) Union(other *Set[T]) *Set[T] {
 }
 
 // Intersection returns a new set that is the intersection of the current set and another set.
+// Time complexity: O(n), where n is the number of elements in the smaller set.
 func (s *Set[T]) Intersection(other *Set[T]) *Set[T] {
 	result := NewSet[T]()
 	for element := range s.data {
@@ -71,6 +80,7 @@ func (s *Set[T]) Intersection(other *Set[T]) *Set[T] {
 }
 
 // Difference returns a new set that contains the elements present in the current set but not in another set.
+// Time complexity: O(n), where n is the number of elements in the current set.
 func (s *Set[T]) Difference(other *Set[T]) *Set[T] {
 	result := NewSet[T]()
 	for element := range s.data {

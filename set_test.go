@@ -2,6 +2,7 @@ package q
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 	"testing"
 
@@ -114,7 +115,9 @@ func TestDifference(t *testing.T) {
 func ExampleSet_Add() {
 	set := NewSet[int]()
 	set.Add(1, 2, 3)
-	fmt.Println(set.Elements())
+	elements := set.Elements()
+	slices.Sort(elements)
+	fmt.Println(elements)
 	// Output: [1 2 3]
 }
 
