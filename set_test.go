@@ -1,6 +1,8 @@
 package q
 
 import (
+	"fmt"
+	"sort"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -106,4 +108,36 @@ func TestDifference(t *testing.T) {
 	assert.Equal(2, differenceSet.Len())
 	assert.True(differenceSet.Contains(1))
 	assert.True(differenceSet.Contains(2))
+}
+
+// Example_Set_Add demonstrates how to add elements to a set.
+func ExampleSet_Add() {
+	set := NewSet[int]()
+	set.Add(1, 2, 3)
+	fmt.Println(set.Elements())
+	// Output: [1 2 3]
+}
+
+// Example_Set_Contains demonstrates how to check if an element exists in a set.
+func ExampleSet_Contains() {
+	set := NewSet[string]()
+	set.Add("apple", "banana", "orange")
+	fmt.Println(set.Contains("banana"))
+	fmt.Println(set.Contains("grape"))
+	// Output:
+	// true
+	// false
+}
+
+// Example_Set_Union demonstrates how to find the union of two sets.
+func ExampleSet_Union() {
+	set1 := NewSet[int]()
+	set1.Add(1, 2, 3)
+	set2 := NewSet[int]()
+	set2.Add(3, 4, 5)
+	unionSet := set1.Union(set2)
+	sorted := sort.IntSlice(unionSet.Elements())
+	sorted.Sort()
+	fmt.Println(sorted)
+	// Output: [1 2 3 4 5]
 }

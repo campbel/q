@@ -1,6 +1,7 @@
 package q
 
 import (
+	"fmt"
 	"math/rand"
 	"testing"
 
@@ -283,4 +284,60 @@ func TestString(t *testing.T) {
 	assert.Equal("[a,b]", NewList("a", "b").String())
 	assert.Equal("[true,false]", NewList(true, false).String())
 	assert.Equal("[map[1:2 3:4]]", NewList(map[int]int{1: 2, 3: 4}).String())
+}
+
+// ExampleList_Push demonstrates how to add elements to the list.
+func ExampleList_Push() {
+	list := NewList[int]()
+	list.Push(1, 2, 3)
+	fmt.Println(list)
+	// Output: [1,2,3]
+}
+
+// ExampleList_Pop demonstrates how to remove and return the last element from the list.
+func ExampleList_Pop() {
+	list := NewList[int](1, 2, 3)
+	last := list.Pop()
+	fmt.Println(last)
+	fmt.Println(list)
+	// Output:
+	// 3
+	// [1,2]
+}
+
+// ExampleList_Reverse demonstrates how to reverse the order of elements in the list.
+func ExampleList_Reverse() {
+	list := NewList[string]("apple", "banana", "orange")
+	list.Reverse()
+	fmt.Println(list)
+	// Output: [orange,banana,apple]
+}
+
+// ExampleList_Each demonstrates how to apply a callback function to each element in the list.
+func ExampleList_Each() {
+	list := NewList[int](1, 2, 3, 4, 5)
+	list.Each(func(value int) {
+		fmt.Print(value*2, " ")
+	})
+	// Output: 2 4 6 8 10
+}
+
+// ExampleList_Find demonstrates how to find the first element that satisfies a condition.
+func ExampleList_Find() {
+	list := NewList[int](1, 2, 3, 4, 5)
+	even := list.Find(func(value int) bool {
+		return value%2 == 0
+	})
+	fmt.Println(even)
+	// Output: 2
+}
+
+// ExampleList_Sort demonstrates how to sort the list using a custom less function.
+func ExampleList_Sort() {
+	list := NewList[int](5, 2, 4, 1, 3)
+	sorted := list.Sort(func(a, b int) bool {
+		return a < b
+	})
+	fmt.Println(sorted)
+	// Output: [1,2,3,4,5]
 }
