@@ -18,6 +18,7 @@ func TestHeap(t *testing.T) {
 
 	// Test Push and Len
 	h.Push(5, 3, 7)
+	assert.Equal("[3 5 7]", h.String())
 	assert.Equal(3, h.Len())
 	assert.Equal(3, h.Top())
 	assert.False(h.Empty())

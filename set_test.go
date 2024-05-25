@@ -14,6 +14,7 @@ func TestNewSet(t *testing.T) {
 	set := NewSet[int]()
 	assert.NotNil(set)
 	assert.Equal(0, set.Len())
+	assert.Equal("[]", set.String())
 }
 
 func TestAdd(t *testing.T) {
