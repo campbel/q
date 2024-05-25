@@ -283,3 +283,14 @@ func TestSlice(t *testing.T) {
 	l := NewList(1, 2, 3, 4, 5).Slice()
 	assert.Equal([]int{1, 2, 3, 4, 5}, l)
 }
+
+func TestString(t *testing.T) {
+	assert := assert.New(t)
+	assert.Equal("[1,2,3]", NewList(1, 2, 3).String())
+	assert.Equal("[]", NewList[int]().String())
+	assert.Equal("[a,b,c]", NewList("a", "b", "c").String())
+	assert.Equal("[a]", NewList("a").String())
+	assert.Equal("[a,b]", NewList("a", "b").String())
+	assert.Equal("[true,false]", NewList(true, false).String())
+	assert.Equal("[map[1:2 3:4]]", NewList(map[int]int{1: 2, 3: 4}).String())
+}

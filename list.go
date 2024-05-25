@@ -1,5 +1,7 @@
 package q
 
+import "fmt"
+
 type List[M any] struct {
 	length int64
 	head   *Node[M]
@@ -104,6 +106,19 @@ func (l *List[M]) Reverse() {
 		n.next, n.prev = n.prev, n.next
 	}
 	l.head, l.tail = l.tail, l.head
+}
+
+func (l *List[M]) String() string {
+	result := "["
+	for n := l.head; n != nil; n = n.next {
+		result += fmt.Sprintf("%v", n.value)
+		if n.next != nil {
+			result += ","
+		}
+	}
+	result += "]"
+	return result
+
 }
 
 func (l *List[M]) Each(callback func(M)) {
