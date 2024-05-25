@@ -17,12 +17,19 @@ type Node[M any] struct {
 func NewList[M any](elements ...M) *List[M] {
 	l := &List[M]{}
 	for _, e := range elements {
-		l.Push(e)
+		l.PushRight(e)
 	}
 	return l
 }
-
 func (l *List[M]) Push(values ...M) {
+	l.PushRight(values...)
+}
+
+func (l *List[M]) Pop() M {
+	return l.PopRight()
+}
+
+func (l *List[M]) PushRight(values ...M) {
 	for _, v := range values {
 		l.length++
 		node := &Node[M]{value: v}
@@ -37,7 +44,7 @@ func (l *List[M]) Push(values ...M) {
 	}
 }
 
-func (l *List[M]) Pop() M {
+func (l *List[M]) PopRight() M {
 	l.length--
 	if l.tail == nil {
 		var m M
@@ -70,7 +77,7 @@ func (l *List[M]) Extend(lists ...*List[M]) {
 	}
 }
 
-func (l *List[M]) Shift() M {
+func (l *List[M]) PopLeft() M {
 	l.length--
 	if l.head == nil {
 		var m M
@@ -86,7 +93,7 @@ func (l *List[M]) Shift() M {
 	return node.value
 }
 
-func (l *List[M]) Unshift(values ...M) {
+func (l *List[M]) PushLeft(values ...M) {
 	for _, v := range values {
 		l.length++
 		node := &Node[M]{value: v}
@@ -149,7 +156,7 @@ func (l *List[M]) Filter(callback func(M) bool) *List[M] {
 	result := &List[M]{}
 	for n := l.head; n != nil; n = n.next {
 		if callback(n.value) {
-			result.Push(n.value)
+			result.PushRight(n.value)
 		}
 	}
 	return result
@@ -216,9 +223,9 @@ func (l *List[M]) partition(less func(M, M) bool) (*List[M], M, *List[M]) {
 	right := NewList[M]()
 	for n := l.head.next; n != nil; n = n.next {
 		if less(n.value, pivot) {
-			left.Push(n.value)
+			left.PushRight(n.value)
 		} else {
-			right.Push(n.value)
+			right.PushRight(n.value)
 		}
 	}
 	return left, pivot, right
@@ -228,7 +235,7 @@ func stitch[M any](left *List[M], pivot M, right *List[M]) *List[M] {
 	if left.length == 0 {
 		return Join(NewList[M](pivot), right)
 	}
-	left.Push(pivot)
+	left.PushRight(pivot)
 	return Join(left, right)
 }
 
@@ -244,7 +251,7 @@ func (l *List[M]) IsSorted(less func(M, M) bool) bool {
 func (l *List[M]) Copy() *List[M] {
 	result := &List[M]{}
 	for n := l.head; n != nil; n = n.next {
-		result.Push(n.value)
+		result.PushRight(n.value)
 	}
 	return result
 }
@@ -260,7 +267,7 @@ func (l *List[M]) Len64() int64 {
 func Map[M any, N any](l *List[M], callback func(M) N) *List[N] {
 	result := &List[N]{}
 	for n := l.head; n != nil; n = n.next {
-		result.Push(callback(n.value))
+		result.PushRight(callback(n.value))
 	}
 	return result
 }
