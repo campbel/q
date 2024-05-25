@@ -271,7 +271,7 @@ func TestDelete(t *testing.T) {
 
 func TestSlice(t *testing.T) {
 	assert := assert.New(t)
-	l := NewList(1, 2, 3, 4, 5).Slice()
+	l := NewList(1, 2, 3, 4, 5).Elements()
 	assert.Equal([]int{1, 2, 3, 4, 5}, l)
 }
 

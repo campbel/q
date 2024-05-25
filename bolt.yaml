@@ -22,3 +22,14 @@ cmds:
     desc: "Format code"
     steps:
       - sh: "goimports -w ."
+
+  goproxy-refresh:
+    desc: "Refresh the Go module proxy"
+    env:
+      GOPROXY: https://proxy.golang.org
+      GO111MODULE: on
+    steps:
+      - sh: |
+          VERSION=$(git rev-parse HEAD)
+          cd ~
+          go get github.com/campbel/q@${VERSION}

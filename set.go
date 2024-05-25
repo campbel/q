@@ -1,5 +1,7 @@
 package q
 
+import "fmt"
+
 // Set is a generic set data structure that stores unique elements of type T.
 type Set[T comparable] struct {
 	data map[T]struct{}
@@ -91,4 +93,8 @@ func (s *Set[T]) Difference(other *Set[T]) *Set[T] {
 		}
 	}
 	return result
+}
+
+func (s *Set[T]) String() string {
+	return fmt.Sprintf("%v", s.Elements())
 }

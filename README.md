@@ -5,6 +5,23 @@
 
 This repository contains implementations of various data structures in Go, including:
 
-- Linked List
+- List
 - Heap
 - Set
+
+```go
+import "github.com/campbel/q"
+
+func main() {
+	list := q.NewList(1, 2, 3)
+	fmt.Println(list)
+
+	heap := q.NewHeap(func(a, b int) bool {
+		return a < b
+	}, 1, 2, 3)
+	fmt.Println(heap)
+
+	set := q.NewSet(1, 2, 3)
+	fmt.Println(set)
+}
+```

@@ -139,15 +139,7 @@ func (l *List[M]) Reverse() {
 // String returns a string representation of the list.
 // Time complexity: O(n), where n is the number of elements in the list.
 func (l *List[M]) String() string {
-	result := "["
-	for n := l.head; n != nil; n = n.next {
-		result += fmt.Sprintf("%v", n.value)
-		if n.next != nil {
-			result += ","
-		}
-	}
-	result += "]"
-	return result
+	return fmt.Sprintf("%v", l.Elements())
 }
 
 // Each applies a callback function to each value in the list.
@@ -170,9 +162,9 @@ func (l *List[M]) Find(callback func(M) bool) M {
 	return m
 }
 
-// Slice returns a slice containing all the values in the list.
+// Elements returns a slice containing all the values in the list.
 // Time complexity: O(n), where n is the number of elements in the list.
-func (l *List[M]) Slice() []M {
+func (l *List[M]) Elements() []M {
 	result := make([]M, 0, l.length)
 	for n := l.head; n != nil; n = n.next {
 		result = append(result, n.value)

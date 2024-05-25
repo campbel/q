@@ -1,5 +1,7 @@
 package q
 
+import "fmt"
+
 // Heap is a generic implementation of a heap data structure.
 type Heap[M any] struct {
 	less func(a, b M) bool
@@ -95,4 +97,9 @@ func (h *Heap[M]) down(i int) {
 // Time complexity: O(1).
 func (h *Heap[M]) swap(i, j int) {
 	h.data[i], h.data[j] = h.data[j], h.data[i]
+}
+
+// String returns a string representation of the heap.
+func (h *Heap[M]) String() string {
+	return fmt.Sprintf("%v", h.data)
 }
