@@ -210,8 +210,8 @@ func IndexOf[M comparable](list *List[M], value M) int {
 	return -1
 }
 
-// Delete removes all occurrences of the value from the list.
-func Delete[M comparable](list *List[M], value M) {
+// Remove removes all occurrences of the value from the list.
+func Remove[M comparable](list *List[M], value M) {
 	for n := list.head; n != nil; n = n.next {
 		if n.value == value {
 			if n == list.head {
