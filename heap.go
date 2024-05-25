@@ -8,8 +8,10 @@ type Heap[M any] struct {
 
 // NewHeap creates a new instance of Heap with the specified less function.
 // Time complexity: O(1).
-func NewHeap[M any](less func(a, b M) bool) *Heap[M] {
-	return &Heap[M]{less: less}
+func NewHeap[M any](less func(a, b M) bool, elements ...M) *Heap[M] {
+	heap := &Heap[M]{less: less}
+	heap.Push(elements...)
+	return heap
 }
 
 // Push adds one or more values to the heap.

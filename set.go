@@ -7,8 +7,10 @@ type Set[T comparable] struct {
 
 // NewSet creates a new Set and returns a pointer to it.
 // Time complexity: O(1).
-func NewSet[T comparable]() *Set[T] {
-	return &Set[T]{data: make(map[T]struct{})}
+func NewSet[T comparable](elements ...T) *Set[T] {
+	set := &Set[T]{data: make(map[T]struct{})}
+	set.Add(elements...)
+	return set
 }
 
 // Add adds one or more elements to the set.
