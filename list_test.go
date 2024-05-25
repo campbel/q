@@ -277,12 +277,12 @@ func TestSlice(t *testing.T) {
 
 func TestString(t *testing.T) {
 	assert := assert.New(t)
-	assert.Equal("[1,2,3]", NewList(1, 2, 3).String())
+	assert.Equal("[1 2 3]", NewList(1, 2, 3).String())
 	assert.Equal("[]", NewList[int]().String())
-	assert.Equal("[a,b,c]", NewList("a", "b", "c").String())
+	assert.Equal("[a b c]", NewList("a", "b", "c").String())
 	assert.Equal("[a]", NewList("a").String())
-	assert.Equal("[a,b]", NewList("a", "b").String())
-	assert.Equal("[true,false]", NewList(true, false).String())
+	assert.Equal("[a b]", NewList("a", "b").String())
+	assert.Equal("[true false]", NewList(true, false).String())
 	assert.Equal("[map[1:2 3:4]]", NewList(map[int]int{1: 2, 3: 4}).String())
 }
 
@@ -291,7 +291,7 @@ func ExampleList_Push() {
 	list := NewList[int]()
 	list.Push(1, 2, 3)
 	fmt.Println(list)
-	// Output: [1,2,3]
+	// Output: [1 2 3]
 }
 
 // ExampleList_Pop demonstrates how to remove and return the last element from the list.
@@ -302,7 +302,7 @@ func ExampleList_Pop() {
 	fmt.Println(list)
 	// Output:
 	// 3
-	// [1,2]
+	// [1 2]
 }
 
 // ExampleList_Reverse demonstrates how to reverse the order of elements in the list.
@@ -310,7 +310,7 @@ func ExampleList_Reverse() {
 	list := NewList[string]("apple", "banana", "orange")
 	list.Reverse()
 	fmt.Println(list)
-	// Output: [orange,banana,apple]
+	// Output: [orange banana apple]
 }
 
 // ExampleList_Each demonstrates how to apply a callback function to each element in the list.
@@ -339,5 +339,5 @@ func ExampleList_Sort() {
 		return a < b
 	})
 	fmt.Println(sorted)
-	// Output: [1,2,3,4,5]
+	// Output: [1 2 3 4 5]
 }
