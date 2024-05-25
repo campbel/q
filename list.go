@@ -2,18 +2,21 @@ package q
 
 import "fmt"
 
+// List represents a generic linked list.
 type List[M any] struct {
 	length int64
 	head   *Node[M]
 	tail   *Node[M]
 }
 
+// Node represents a node in the linked list.
 type Node[M any] struct {
 	value M
 	next  *Node[M]
 	prev  *Node[M]
 }
 
+// NewList creates a new List and initializes it with the given elements.
 func NewList[M any](elements ...M) *List[M] {
 	l := &List[M]{}
 	for _, e := range elements {
@@ -21,14 +24,18 @@ func NewList[M any](elements ...M) *List[M] {
 	}
 	return l
 }
+
+// Push adds values to the list.
 func (l *List[M]) Push(values ...M) {
 	l.PushRight(values...)
 }
 
+// Pop removes and returns the last value from the list.
 func (l *List[M]) Pop() M {
 	return l.PopRight()
 }
 
+// PushRight adds values to the end of the list.
 func (l *List[M]) PushRight(values ...M) {
 	for _, v := range values {
 		l.length++
@@ -44,6 +51,7 @@ func (l *List[M]) PushRight(values ...M) {
 	}
 }
 
+// PopRight removes and returns the last value from the list.
 func (l *List[M]) PopRight() M {
 	l.length--
 	if l.tail == nil {
@@ -60,6 +68,7 @@ func (l *List[M]) PopRight() M {
 	return node.value
 }
 
+// Extend appends other lists to the current list.
 func (l *List[M]) Extend(lists ...*List[M]) {
 	for _, other := range lists {
 		if other.length == 0 {
@@ -77,6 +86,7 @@ func (l *List[M]) Extend(lists ...*List[M]) {
 	}
 }
 
+// PopLeft removes and returns the first value from the list.
 func (l *List[M]) PopLeft() M {
 	l.length--
 	if l.head == nil {
@@ -93,6 +103,7 @@ func (l *List[M]) PopLeft() M {
 	return node.value
 }
 
+// PushLeft adds values to the beginning of the list.
 func (l *List[M]) PushLeft(values ...M) {
 	for _, v := range values {
 		l.length++
@@ -108,6 +119,7 @@ func (l *List[M]) PushLeft(values ...M) {
 	}
 }
 
+// Reverse reverses the order of the list.
 func (l *List[M]) Reverse() {
 	for n := l.head; n != nil; n = n.prev {
 		n.next, n.prev = n.prev, n.next
@@ -115,6 +127,7 @@ func (l *List[M]) Reverse() {
 	l.head, l.tail = l.tail, l.head
 }
 
+// String returns a string representation of the list.
 func (l *List[M]) String() string {
 	result := "["
 	for n := l.head; n != nil; n = n.next {
@@ -125,15 +138,16 @@ func (l *List[M]) String() string {
 	}
 	result += "]"
 	return result
-
 }
 
+// Each applies a callback function to each value in the list.
 func (l *List[M]) Each(callback func(M)) {
 	for n := l.head; n != nil; n = n.next {
 		callback(n.value)
 	}
 }
 
+// Find returns the first value in the list that satisfies the callback function.
 func (l *List[M]) Find(callback func(M) bool) M {
 	for n := l.head; n != nil; n = n.next {
 		if callback(n.value) {
@@ -144,6 +158,7 @@ func (l *List[M]) Find(callback func(M) bool) M {
 	return m
 }
 
+// Slice returns a slice containing all the values in the list.
 func (l *List[M]) Slice() []M {
 	result := make([]M, 0, l.length)
 	for n := l.head; n != nil; n = n.next {
@@ -152,6 +167,7 @@ func (l *List[M]) Slice() []M {
 	return result
 }
 
+// Filter returns a new list containing only the values that satisfy the callback function.
 func (l *List[M]) Filter(callback func(M) bool) *List[M] {
 	result := &List[M]{}
 	for n := l.head; n != nil; n = n.next {
@@ -162,6 +178,7 @@ func (l *List[M]) Filter(callback func(M) bool) *List[M] {
 	return result
 }
 
+// All returns true if all values in the list satisfy the callback function, false otherwise.
 func (l *List[M]) All(callback func(M) bool) bool {
 	for n := l.head; n != nil; n = n.next {
 		if !callback(n.value) {
@@ -171,6 +188,7 @@ func (l *List[M]) All(callback func(M) bool) bool {
 	return true
 }
 
+// Any returns true if at least one value in the list satisfies the callback function, false otherwise.
 func (l *List[M]) Any(callback func(M) bool) bool {
 	for n := l.head; n != nil; n = n.next {
 		if callback(n.value) {
@@ -180,6 +198,7 @@ func (l *List[M]) Any(callback func(M) bool) bool {
 	return false
 }
 
+// IndexOf returns the index of the first occurrence of the value in the list, or -1 if not found.
 func IndexOf[M comparable](list *List[M], value M) int {
 	index := 0
 	for n := list.head; n != nil; n = n.next {
@@ -191,6 +210,7 @@ func IndexOf[M comparable](list *List[M], value M) int {
 	return -1
 }
 
+// Delete removes all occurrences of the value from the list.
 func Delete[M comparable](list *List[M], value M) {
 	for n := list.head; n != nil; n = n.next {
 		if n.value == value {
@@ -209,6 +229,7 @@ func Delete[M comparable](list *List[M], value M) {
 	}
 }
 
+// Sort returns a new sorted list using the provided less function.
 func (l *List[M]) Sort(less func(M, M) bool) *List[M] {
 	if l.length < 2 {
 		return l
@@ -217,6 +238,7 @@ func (l *List[M]) Sort(less func(M, M) bool) *List[M] {
 	return stitch(left.Sort(less), pivot, right.Sort(less))
 }
 
+// partition partitions the list into three parts: left, pivot, and right.
 func (l *List[M]) partition(less func(M, M) bool) (*List[M], M, *List[M]) {
 	pivot := l.head.value
 	left := NewList[M]()
@@ -231,6 +253,7 @@ func (l *List[M]) partition(less func(M, M) bool) (*List[M], M, *List[M]) {
 	return left, pivot, right
 }
 
+// stitch combines the left, pivot, and right lists into a single list.
 func stitch[M any](left *List[M], pivot M, right *List[M]) *List[M] {
 	if left.length == 0 {
 		return Join(NewList[M](pivot), right)
@@ -239,6 +262,7 @@ func stitch[M any](left *List[M], pivot M, right *List[M]) *List[M] {
 	return Join(left, right)
 }
 
+// IsSorted returns true if the list is sorted in non-decreasing order according to the provided less function, false otherwise.
 func (l *List[M]) IsSorted(less func(M, M) bool) bool {
 	for n := l.head; n != nil && n.next != nil; n = n.next {
 		if less(n.next.value, n.value) {
@@ -248,6 +272,7 @@ func (l *List[M]) IsSorted(less func(M, M) bool) bool {
 	return true
 }
 
+// Copy returns a new list with the same values as the original list.
 func (l *List[M]) Copy() *List[M] {
 	result := &List[M]{}
 	for n := l.head; n != nil; n = n.next {
@@ -256,14 +281,17 @@ func (l *List[M]) Copy() *List[M] {
 	return result
 }
 
+// Len returns the length of the list.
 func (l *List[M]) Len() int {
 	return int(l.length)
 }
 
+// Len64 returns the length of the list as an int64.
 func (l *List[M]) Len64() int64 {
 	return l.length
 }
 
+// Map applies a callback function to each value in the list and returns a new list with the results.
 func Map[M any, N any](l *List[M], callback func(M) N) *List[N] {
 	result := &List[N]{}
 	for n := l.head; n != nil; n = n.next {
@@ -272,6 +300,7 @@ func Map[M any, N any](l *List[M], callback func(M) N) *List[N] {
 	return result
 }
 
+// Reduce applies a callback function to each value in the list and returns a single accumulated value.
 func Reduce[M any, N any](l *List[M], callback func(N, M) N, initial N) N {
 	acc := initial
 	for n := l.head; n != nil; n = n.next {
@@ -280,6 +309,7 @@ func Reduce[M any, N any](l *List[M], callback func(N, M) N, initial N) N {
 	return acc
 }
 
+// Equal returns true if the two lists are equal, false otherwise.
 func Equal[M comparable](a, b *List[M]) bool {
 	if a == nil || b == nil {
 		return a == b
@@ -295,6 +325,7 @@ func Equal[M comparable](a, b *List[M]) bool {
 	return true
 }
 
+// Join combines multiple lists into a single list.
 func Join[M any](lists ...*List[M]) *List[M] {
 	if len(lists) == 0 {
 		return NewList[M]()
