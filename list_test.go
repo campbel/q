@@ -357,3 +357,26 @@ func ExampleList_Sort() {
 	fmt.Println(sorted)
 	// Output: [1 2 3 4 5]
 }
+
+func TestPeek(t *testing.T) {
+	assert := assert.New(t)
+	l := NewList[int](1, 2, 3)
+	assert.Equal(3, l.PeekRight())
+	assert.Equal(3, l.PopRight())
+	assert.Equal(2, l.PeekRight())
+	assert.Equal(2, l.PopRight())
+	assert.Equal(1, l.PeekRight())
+	assert.Equal(1, l.PopRight())
+	assert.Zero(l.PeekRight())
+	assert.Zero(l.PopRight())
+
+	l = NewList[int](1, 2, 3)
+	assert.Equal(1, l.PeekLeft())
+	assert.Equal(1, l.PopLeft())
+	assert.Equal(2, l.PeekLeft())
+	assert.Equal(2, l.PopLeft())
+	assert.Equal(3, l.PeekLeft())
+	assert.Equal(3, l.PopLeft())
+	assert.Zero(l.PeekLeft())
+	assert.Zero(l.PopLeft())
+}

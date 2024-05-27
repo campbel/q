@@ -127,6 +127,26 @@ func (l *List[M]) PushLeft(values ...M) {
 	}
 }
 
+// PeekLeft returns the first value in the list without removing it.
+// Time complexity: O(1).
+func (l *List[M]) PeekLeft() M {
+	if l.head == nil {
+		var m M
+		return m
+	}
+	return l.head.value
+}
+
+// PeekRight returns the last value in the list without removing it.
+// Time complexity: O(1).
+func (l *List[M]) PeekRight() M {
+	if l.tail == nil {
+		var m M
+		return m
+	}
+	return l.tail.value
+}
+
 // Reverse reverses the order of the list.
 // Time complexity: O(n), where n is the number of elements in the list.
 func (l *List[M]) Reverse() {
