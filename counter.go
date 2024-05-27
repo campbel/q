@@ -4,6 +4,7 @@ import "fmt"
 
 // Counter is a generic counter data structure that stores unique elements of type T and counts occurences.
 type Counter[T comparable] struct {
+	size int
 	data map[T]int
 }
 
@@ -18,6 +19,7 @@ func NewCounter[T comparable](elements ...T) *Counter[T] {
 // Add adds one or more elements to the counter.
 // Time complexity: O(n), where n is the number of elements being added.
 func (c *Counter[T]) Add(elements ...T) {
+	c.size += len(elements)
 	for _, element := range elements {
 		c.data[element]++
 	}
@@ -25,8 +27,16 @@ func (c *Counter[T]) Add(elements ...T) {
 
 // Remove removes an element from the counter.
 // Time complexity: O(1).
-func (c *Counter[T]) Remove(element T) {
-	delete(c.data, element)
+func (c *Counter[T]) Remove(elements ...T) {
+	for _, element := range elements {
+		if c.Contains(element) {
+			c.size--
+			c.data[element]--
+			if c.data[element] == 0 {
+				delete(c.data, element)
+			}
+		}
+	}
 }
 
 // Contains checks if an element is present in the counter.
@@ -36,6 +46,8 @@ func (c *Counter[T]) Contains(element T) bool {
 	return exists
 }
 
+// Count returns the number of occurences of an element in the counter.
+// Time complexity: O(1).
 func (c *Counter[T]) Count(element T) int {
 	if c.Contains(element) {
 		return c.data[element]
@@ -46,12 +58,13 @@ func (c *Counter[T]) Count(element T) int {
 // Len returns the number of elements in the counter.
 // Time complexity: O(1).
 func (c *Counter[T]) Len() int {
-	return len(c.data)
+	return c.size
 }
 
 // Clear removes all elements from the counter.
 // Time complexity: O(1).
 func (c *Counter[T]) Clear() {
+	c.size = 0
 	c.data = make(map[T]int)
 }
 
@@ -79,6 +92,14 @@ func (c *Counter[T]) Equal(other *Counter[T]) bool {
 	return true
 }
 
+// String returns a string representation of the counter.
+// Time complexity: O(n), where n is the number of elements in the counter.
 func (c *Counter[T]) String() string {
 	return fmt.Sprintf("%v", c.data)
+}
+
+// IsEmpty checks if the counter is empty.
+// Time complexity: O(1).
+func (c *Counter[T]) IsEmpty() bool {
+	return c.Len() == 0
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCounter_Count(t *testing.T) {
+func TestCounterCount(t *testing.T) {
 	assert := assert.New(t)
 	counter := NewCounter("a", "b", "c")
 	counter.Add("a", "b", "c", "d")
@@ -16,20 +16,21 @@ func TestCounter_Count(t *testing.T) {
 	assert.Equal(1, counter.Count("d"))
 	assert.Equal(0, counter.Count("e"))
 
-	assert.Equal(4, counter.Len())
+	assert.Equal(7, counter.Len())
 	assert.Equal(4, len(counter.Elements()))
 	counter.Clear()
 	assert.Equal(0, counter.Len())
+	assert.True(counter.IsEmpty())
 }
 
-func TestCounter_String(t *testing.T) {
+func TestCounterString(t *testing.T) {
 	assert := assert.New(t)
 	counter := NewCounter("a", "b", "c")
 	expected := "map[a:1 b:1 c:1]"
 	assert.Equal(expected, counter.String())
 }
 
-func TestCounter_Equal(t *testing.T) {
+func TestCounterEqual(t *testing.T) {
 	assert := assert.New(t)
 	counter1 := NewCounter("a", "b", "c")
 	counter2 := NewCounter("a", "b", "c")
@@ -41,11 +42,12 @@ func TestCounter_Equal(t *testing.T) {
 	counter2.Remove("d")
 	assert.True(counter1.Equal(counter2))
 
+	counter1.Add("b")
 	counter2.Add("a")
 	assert.False(counter1.Equal(counter2))
 }
 
-func TestCounter_Add(t *testing.T) {
+func TestCounterAdd(t *testing.T) {
 	assert := assert.New(t)
 	counter := NewCounter("a", "b", "c")
 	counter.Add("a", "b", "c", "d")
@@ -60,4 +62,13 @@ func TestCounter_Add(t *testing.T) {
 	for element, count := range expected {
 		assert.Equal(count, counter.Count(element))
 	}
+}
+
+func TestCounterRemove(t *testing.T) {
+	assert := assert.New(t)
+	counter := NewCounter("a", "b", "c")
+	counter.Add("a", "b", "c", "d")
+
+	counter.Remove("a", "b", "c", "d")
+	assert.Equal(3, counter.Len())
 }
