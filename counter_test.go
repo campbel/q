@@ -69,6 +69,7 @@ func TestCounterRemove(t *testing.T) {
 	counter := NewCounter("a", "b", "c")
 	counter.Add("a", "b", "c", "d")
 
-	counter.Remove("a", "b", "c", "d")
+	assert.True(counter.Remove("a", "b", "c", "d"))
 	assert.Equal(3, counter.Len())
+	assert.False(counter.Remove("z"))
 }

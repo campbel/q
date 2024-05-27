@@ -25,9 +25,10 @@ func (c *Counter[T]) Add(elements ...T) {
 	}
 }
 
-// Remove removes an element from the counter.
+// Remove removes an element from the counter. If the element is not present it returns false.
 // Time complexity: O(1).
-func (c *Counter[T]) Remove(elements ...T) {
+func (c *Counter[T]) Remove(elements ...T) bool {
+	allRemoved := true
 	for _, element := range elements {
 		if c.Contains(element) {
 			c.size--
@@ -35,8 +36,11 @@ func (c *Counter[T]) Remove(elements ...T) {
 			if c.data[element] == 0 {
 				delete(c.data, element)
 			}
+		} else {
+			allRemoved = false
 		}
 	}
+	return allRemoved
 }
 
 // Contains checks if an element is present in the counter.
