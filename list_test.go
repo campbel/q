@@ -109,7 +109,7 @@ func TestListEach(t *testing.T) {
 	l := NewList[int]()
 	l.PushRight(1, 2, 3)
 	sum := 0
-	l.Each(func(value int) {
+	l.Each(func(i, value int) {
 		sum += value
 	})
 	assert.Equal(6, sum)
@@ -119,12 +119,12 @@ func TestListFind(t *testing.T) {
 	assert := assert.New(t)
 	l := NewList[int]()
 	l.PushRight(1, 2, 3)
-	value := l.Find(func(value int) bool {
+	value := l.Find(func(i, value int) bool {
 		return value == 2
 	})
 	assert.Equal(2, value)
 
-	zero := l.Find(func(value int) bool {
+	zero := l.Find(func(i, value int) bool {
 		return false
 	})
 	assert.Zero(zero)
@@ -134,7 +134,7 @@ func TestListFilter(t *testing.T) {
 	assert := assert.New(t)
 	l := NewList[int]()
 	l.PushRight(1, 2, 3)
-	l = l.Filter(func(value int) bool {
+	l = l.Filter(func(i, value int) bool {
 		return value%2 == 0
 	})
 	assert.Equal(1, l.Len())
@@ -219,10 +219,10 @@ func TestListExtend(t *testing.T) {
 func TestAll(t *testing.T) {
 	assert := assert.New(t)
 	l := NewList(1, 2, 3)
-	assert.True(l.All(func(value int) bool {
+	assert.True(l.All(func(i, value int) bool {
 		return value > 0
 	}))
-	assert.False(l.All(func(value int) bool {
+	assert.False(l.All(func(i, value int) bool {
 		return value > 1
 	}))
 }
@@ -230,10 +230,10 @@ func TestAll(t *testing.T) {
 func TestAny(t *testing.T) {
 	assert := assert.New(t)
 	l := NewList(1, 2, 3)
-	assert.True(l.Any(func(value int) bool {
+	assert.True(l.Any(func(i, value int) bool {
 		return value > 2
 	}))
-	assert.False(l.Any(func(value int) bool {
+	assert.False(l.Any(func(i, value int) bool {
 		return value > 3
 	}))
 }
@@ -269,7 +269,7 @@ func TestDelete(t *testing.T) {
 	assert.Zero(l.PopLeft())
 }
 
-func TestSlice(t *testing.T) {
+func TestListElements(t *testing.T) {
 	assert := assert.New(t)
 	l := NewList(1, 2, 3, 4, 5).Elements()
 	assert.Equal([]int{1, 2, 3, 4, 5}, l)
@@ -284,6 +284,22 @@ func TestString(t *testing.T) {
 	assert.Equal("[a b]", NewList("a", "b").String())
 	assert.Equal("[true false]", NewList(true, false).String())
 	assert.Equal("[map[1:2 3:4]]", NewList(map[int]int{1: 2, 3: 4}).String())
+}
+
+func TestListSlice(t *testing.T) {
+	assert := assert.New(t)
+	arr := []int{1, 2, 3, 4, 5}
+	list := NewList(arr...)
+	assert.Equal(arr[0:5], list.Slice(0, 5).Elements())
+	assert.Equal(arr[1:4], list.Slice(1, 4).Elements())
+	assert.Equal(arr[2:5], list.Slice(2, 5).Elements())
+	assert.Equal(arr[3:5], list.Slice(3, 5).Elements())
+	assert.Equal(arr[4:5], list.Slice(4, 5).Elements())
+	assert.Equal(arr[0:0], list.Slice(0, 0).Elements())
+	assert.Equal(arr[0:1], list.Slice(0, 1).Elements())
+	assert.Equal(arr[:], list.Slice(-1, -1).Elements())
+	assert.Equal(arr[5:], list.Slice(5, -1).Elements())
+	assert.Equal(arr[:5], list.Slice(-1, 5).Elements())
 }
 
 // ExampleList_Push demonstrates how to add elements to the list.
@@ -316,7 +332,7 @@ func ExampleList_Reverse() {
 // ExampleList_Each demonstrates how to apply a callback function to each element in the list.
 func ExampleList_Each() {
 	list := NewList[int](1, 2, 3, 4, 5)
-	list.Each(func(value int) {
+	list.Each(func(i, value int) {
 		fmt.Print(value*2, " ")
 	})
 	// Output: 2 4 6 8 10
@@ -325,7 +341,7 @@ func ExampleList_Each() {
 // ExampleList_Find demonstrates how to find the first element that satisfies a condition.
 func ExampleList_Find() {
 	list := NewList[int](1, 2, 3, 4, 5)
-	even := list.Find(func(value int) bool {
+	even := list.Find(func(i, value int) bool {
 		return value%2 == 0
 	})
 	fmt.Println(even)

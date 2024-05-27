@@ -144,19 +144,23 @@ func (l *List[M]) String() string {
 
 // Each applies a callback function to each value in the list.
 // Time complexity: O(n), where n is the number of elements in the list.
-func (l *List[M]) Each(callback func(M)) {
+func (l *List[M]) Each(callback func(int, M)) {
+	i := 0
 	for n := l.head; n != nil; n = n.next {
-		callback(n.value)
+		callback(i, n.value)
+		i++
 	}
 }
 
 // Find returns the first value in the list that satisfies the callback function.
 // Time complexity: O(n), where n is the number of elements in the list.
-func (l *List[M]) Find(callback func(M) bool) M {
+func (l *List[M]) Find(callback func(int, M) bool) M {
+	i := 0
 	for n := l.head; n != nil; n = n.next {
-		if callback(n.value) {
+		if callback(i, n.value) {
 			return n.value
 		}
+		i++
 	}
 	var m M
 	return m
@@ -174,34 +178,40 @@ func (l *List[M]) Elements() []M {
 
 // Filter returns a new list containing only the values that satisfy the callback function.
 // Time complexity: O(n), where n is the number of elements in the list.
-func (l *List[M]) Filter(callback func(M) bool) *List[M] {
+func (l *List[M]) Filter(callback func(int, M) bool) *List[M] {
+	i := 0
 	result := &List[M]{}
 	for n := l.head; n != nil; n = n.next {
-		if callback(n.value) {
+		if callback(i, n.value) {
 			result.PushRight(n.value)
 		}
+		i++
 	}
 	return result
 }
 
 // All returns true if all values in the list satisfy the callback function, false otherwise.
 // Time complexity: O(n), where n is the number of elements in the list.
-func (l *List[M]) All(callback func(M) bool) bool {
+func (l *List[M]) All(callback func(int, M) bool) bool {
+	i := 0
 	for n := l.head; n != nil; n = n.next {
-		if !callback(n.value) {
+		if !callback(i, n.value) {
 			return false
 		}
+		i++
 	}
 	return true
 }
 
 // Any returns true if at least one value in the list satisfies the callback function, false otherwise.
 // Time complexity: O(n), where n is the number of elements in the list.
-func (l *List[M]) Any(callback func(M) bool) bool {
+func (l *List[M]) Any(callback func(int, M) bool) bool {
+	i := 0
 	for n := l.head; n != nil; n = n.next {
-		if callback(n.value) {
+		if callback(i, n.value) {
 			return true
 		}
+		i++
 	}
 	return false
 }
@@ -239,6 +249,23 @@ func Remove[M comparable](list *List[M], value M) {
 			list.length--
 		}
 	}
+}
+
+// Slice returns a new list containing the elements from the start index to the stop index.
+// Time complexity: O(n), where n is the number of elements in the list.
+func (l *List[M]) Slice(start, stop int) *List[M] {
+	if start < 0 {
+		start = 0
+	}
+	if stop > l.Len() || stop < 0 {
+		stop = l.Len()
+	}
+	if start >= stop {
+		return NewList[M]()
+	}
+	return l.Filter(func(i int, _ M) bool {
+		return i >= start && i < stop
+	})
 }
 
 // Sort returns a new sorted list using the provided less function.
